@@ -3,9 +3,9 @@
 Plugin Name: Equation Editor
 Plugin URI: https://wordpress.org/plugins/equation-editor/
 Description: Adds equation editor to wordpress TinyMCE editor.
-Author: modalweb
+Author: NuageLab <wordpress-plugins@nuagelab.com>
 Version: 1.7
-Author URI: https://profiles.wordpress.org/modalweb
+Author URI: https://profiles.wordpress.org/nuagelab
 */
 if(!class_exists('mw_equation_editor')) {
 	class mw_equation_editor {

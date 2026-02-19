@@ -2,9 +2,6 @@
 $this->save(); ?>
 <div class="wrap">
 <h2><?php _e('Equation Editor', 'equation-editor');?></h2>
-           <div class="notice notice-success">
-<p><?php _e('<strong>Install <a href="http://modalwebstore.com/product/equation-editor-pro/" target="_blank">Equation Editor PRO</a> with new and multiple advanced features.</strong>', 'equation-editor');?> <a href="http://modalwebstore.com/product/equation-editor-pro/" class="button button-primary" target="_blank">Install Now</a></p></button>
-    </div>
 <form action="" method="post" id="ffm_manager">
 <?php wp_nonce_field( 'mw_equation_editor_action', 'mw_equation_editor_nonce' ); //common ?>
 <table class="form-table">
@@ -34,11 +31,9 @@ $this->save(); ?>
 <?php echo '<img src="' . plugins_url( 'rateus.png', __FILE__ ) . '"> '; ?></a><p style="color:red"><?php _e('Equation Editor is a new plugin on wordpress. Please spend 2 minutes to appreciate our work with ratings.', 'equation-editor');?>
 </p></th></tr>
 </table>
- <table>
- <tr>
- <th><a href="http://modalwebstore.com/product/equation-editor-pro/" class="button" target="_blank">Documentation</a></th>
- <th><a href="http://modalwebstore.com/contact-us/" class="button" target="_blank">Support</a></th>
- <th><a href="http://modalwebstore.com/donate" class="button" target="_blank">Donate</a></th>
- </tr>
+<table>
+<tr>
+<th><a href="https://wordpress.org/support/plugin/equation-editor/" class="button" target="_blank">Support</a></th>
+</tr>
 </table>
 </div>
