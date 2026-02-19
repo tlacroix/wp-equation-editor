@@ -1,0 +1,13 @@
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE/Editor
+.idea/
+.vscode/
+*.sublime-*
+
+# Wiris formula cache (generated at runtime)
+tiny_mce_wiris/cache/*
+!tiny_mce_wiris/cache/.htaccess
+!tiny_mce_wiris/cache/info.txt
