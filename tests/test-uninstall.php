@@ -23,7 +23,7 @@ class UninstallTest extends WP_UnitTestCase {
 		// Set up test option.
 		update_option( 'mw_equation_editor', array(
 			'enable_eq_editor' => '1',
-			'select_eq_editor' => 'wiris',
+			
 		) );
 
 		// Verify option exists.

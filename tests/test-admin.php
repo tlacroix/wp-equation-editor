@@ -75,27 +75,11 @@ class AdminTest extends WP_UnitTestCase {
 	public function test_sanitize_valid_input() {
 		$input = array(
 			'enable_eq_editor' => '1',
-			'select_eq_editor' => 'latex',
 		);
 
 		$result = $this->settings->sanitize( $input );
 
 		$this->assertEquals( '1', $result['enable_eq_editor'] );
-		$this->assertEquals( 'latex', $result['select_eq_editor'] );
-	}
-
-	/**
-	 * Test that invalid editor type defaults to wiris.
-	 */
-	public function test_sanitize_invalid_editor_type_defaults_to_wiris() {
-		$input = array(
-			'enable_eq_editor' => '1',
-			'select_eq_editor' => 'invalid_editor',
-		);
-
-		$result = $this->settings->sanitize( $input );
-
-		$this->assertEquals( 'wiris', $result['select_eq_editor'] );
 	}
 
 	/**
@@ -103,7 +87,6 @@ class AdminTest extends WP_UnitTestCase {
 	 */
 	public function test_sanitize_unchecked_checkbox() {
 		$input = array(
-			'select_eq_editor' => 'wiris',
 			// enable_eq_editor not set (unchecked checkbox)
 		);
 
@@ -118,7 +101,6 @@ class AdminTest extends WP_UnitTestCase {
 	public function test_sanitize_only_returns_expected_keys() {
 		$input = array(
 			'enable_eq_editor' => '1',
-			'select_eq_editor' => 'latex',
 			'malicious_key'    => 'should_not_be_saved',
 			'another_extra'    => 'also_ignored',
 		);
@@ -126,27 +108,10 @@ class AdminTest extends WP_UnitTestCase {
 		$result = $this->settings->sanitize( $input );
 
 		// Verify only expected keys
-		$this->assertCount( 2, $result );
+		$this->assertCount( 1, $result );
 		$this->assertArrayHasKey( 'enable_eq_editor', $result );
-		$this->assertArrayHasKey( 'select_eq_editor', $result );
 		$this->assertArrayNotHasKey( 'malicious_key', $result );
 		$this->assertArrayNotHasKey( 'another_extra', $result );
-	}
-
-	/**
-	 * Test that all valid editor types are accepted.
-	 */
-	public function test_sanitize_all_valid_editor_types() {
-		$valid_types = array( 'wiris', 'latex', 'both' );
-
-		foreach ( $valid_types as $type ) {
-			$input  = array(
-				'enable_eq_editor' => '1',
-				'select_eq_editor' => $type,
-			);
-			$result = $this->settings->sanitize( $input );
-			$this->assertEquals( $type, $result['select_eq_editor'] );
-		}
 	}
 
 	/**
@@ -195,7 +160,6 @@ class AdminTest extends WP_UnitTestCase {
 	public function test_render_enable_field() {
 		update_option( 'mw_equation_editor', array(
 			'enable_eq_editor' => '1',
-			'select_eq_editor' => 'wiris',
 		) );
 
 		ob_start();
@@ -204,24 +168,6 @@ class AdminTest extends WP_UnitTestCase {
 
 		$this->assertStringContainsString( 'enable_eq_editor', $output );
 		$this->assertStringContainsString( 'checked', $output );
-	}
-
-	/**
-	 * Test editor type field rendering.
-	 */
-	public function test_render_editor_type_field() {
-		update_option( 'mw_equation_editor', array(
-			'enable_eq_editor' => '1',
-			'select_eq_editor' => 'latex',
-		) );
-
-		ob_start();
-		$this->settings->render_editor_type_field();
-		$output = ob_get_clean();
-
-		$this->assertStringContainsString( 'select_eq_editor', $output );
-		// Latex should be selected
-		$this->assertMatchesRegularExpression( '/<option[^>]+value="latex"[^>]+selected/', $output );
 	}
 
 	/**

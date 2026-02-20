@@ -193,7 +193,6 @@ class PluginTest extends WP_UnitTestCase {
 		$settings = get_option( 'mw_equation_editor' );
 		$this->assertIsArray( $settings );
 		$this->assertArrayHasKey( 'enable_eq_editor', $settings );
-		$this->assertArrayHasKey( 'select_eq_editor', $settings );
 	}
 
 	/**
@@ -210,32 +209,18 @@ class PluginTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Test activate default uses wiris editor.
-	 */
-	public function test_activate_default_uses_wiris() {
-		delete_option( 'mw_equation_editor' );
-
-		$plugin = new Plugin();
-		$plugin->activate();
-
-		$settings = get_option( 'mw_equation_editor' );
-		$this->assertEquals( 'wiris', $settings['select_eq_editor'] );
-	}
-
-	/**
 	 * Test activate preserves existing enable setting.
 	 */
 	public function test_activate_preserves_enable_setting() {
 		update_option( 'mw_equation_editor', array(
 			'enable_eq_editor' => '1',
-			'select_eq_editor' => 'latex',
 		) );
 
 		$plugin = new Plugin();
 		$plugin->activate();
 
 		$settings = get_option( 'mw_equation_editor' );
-		$this->assertEquals( 'latex', $settings['select_eq_editor'] );
+		$this->assertEquals( '1', $settings['enable_eq_editor'] );
 	}
 
 	/**
@@ -274,7 +259,6 @@ class PluginTest extends WP_UnitTestCase {
 	public function test_deactivate_preserves_settings() {
 		update_option( 'mw_equation_editor', array(
 			'enable_eq_editor' => '1',
-			'select_eq_editor' => 'latex',
 		) );
 
 		$plugin = new Plugin();
@@ -283,7 +267,7 @@ class PluginTest extends WP_UnitTestCase {
 		// Settings should still exist after deactivation.
 		$settings = get_option( 'mw_equation_editor' );
 		$this->assertIsArray( $settings );
-		$this->assertEquals( 'latex', $settings['select_eq_editor'] );
+		$this->assertEquals( '1', $settings['enable_eq_editor'] );
 	}
 
 	/**

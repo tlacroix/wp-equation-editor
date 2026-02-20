@@ -45,15 +45,6 @@ class TinyMCE {
 	}
 
 	/**
-	 * Get the selected editor type.
-	 *
-	 * @return string
-	 */
-	private function get_editor_type(): string {
-		return $this->settings['select_eq_editor'] ?? '';
-	}
-
-	/**
 	 * Add TinyMCE buttons based on editor selection.
 	 *
 	 * @param array $buttons Existing TinyMCE buttons.
@@ -64,16 +55,7 @@ class TinyMCE {
 			return null;
 		}
 
-		$editor = $this->get_editor_type();
-
-		if ( 'latex' === $editor ) {
-			array_push( $buttons, 'separator', 'equation' );
-		} elseif ( 'wiris' === $editor ) {
-			array_push( $buttons, 'separator', 'tiny_mce_wiris_formulaEditor', 'tiny_mce_wiris_formulaEditorChemistry' );
-		} elseif ( 'both' === $editor ) {
-			array_push( $buttons, 'separator', 'equation' );
-			array_push( $buttons, 'separator', 'tiny_mce_wiris_formulaEditor', 'tiny_mce_wiris_formulaEditorChemistry' );
-		}
+		array_push( $buttons, 'separator', 'equation' );
 
 		return $buttons;
 	}
@@ -89,16 +71,7 @@ class TinyMCE {
 			return $plugin_array;
 		}
 
-		$editor = $this->get_editor_type();
-
-		if ( 'latex' === $editor ) {
-			$plugin_array['equation'] = EQUATION_EDITOR_URL . 'assets/js/eq_editor.js';
-		} elseif ( 'wiris' === $editor ) {
-			$plugin_array['tiny_mce_wiris'] = EQUATION_EDITOR_URL . 'tiny_mce_wiris/editor_plugin.js';
-		} elseif ( 'both' === $editor ) {
-			$plugin_array['equation']       = EQUATION_EDITOR_URL . 'assets/js/eq_editor.js';
-			$plugin_array['tiny_mce_wiris'] = EQUATION_EDITOR_URL . 'tiny_mce_wiris/editor_plugin.js';
-		}
+		$plugin_array['equation'] = EQUATION_EDITOR_URL . 'assets/js/eq_editor.js';
 
 		return $plugin_array;
 	}
