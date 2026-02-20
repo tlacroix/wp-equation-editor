@@ -37,6 +37,13 @@ Settings page accessible at: WordPress Admin → Equation Editor
 
 Editor type options: `wiris`, `latex`, `both`
 
+## PHP Compatibility
+
+**Required:** PHP 8.0+
+**Tested:** PHP 8.0, 8.1, 8.2, 8.3, 8.4
+
+The Wiris integration library (`tiny_mce_wiris/integration/lib/`) is auto-generated from Haxe and has been patched for PHP 8.0+ compatibility (replaced deprecated `each()` with `foreach`).
+
 ## Testing
 
 ```bash
@@ -50,4 +57,4 @@ bin/install-wp-tests.sh wordpress_test root '' localhost latest
 composer test
 ```
 
-Tests run automatically on push/PR via GitHub Actions (PHP 7.4-8.2, WP latest + 6.0).
+Tests run automatically on push/PR via GitHub Actions (PHP 8.0-8.4, WP latest + 6.0).
