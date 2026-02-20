@@ -12,3 +12,5 @@ parameters:
         - tiny_mce_wiris
         - vendor
         - tests
+        - node_modules
+        - build
