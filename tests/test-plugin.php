@@ -36,7 +36,7 @@ class PluginTest extends WP_UnitTestCase {
 	 * Test plugin version constant value.
 	 */
 	public function test_plugin_version() {
-		$this->assertEquals( '2.0.0', EQUATION_EDITOR_VERSION );
+		$this->assertEquals( '2.1.0', EQUATION_EDITOR_VERSION );
 	}
 
 	/**

@@ -32,3 +32,6 @@ phpcs-report.xml
 tiny_mce_wiris/cache/*
 !tiny_mce_wiris/cache/.htaccess
 !tiny_mce_wiris/cache/info.txt
+
+# WordPress submission bundle
+/wordpress-submission/

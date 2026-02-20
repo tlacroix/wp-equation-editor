@@ -35,7 +35,7 @@
       "default": true
     }
   },
-  "textdomain": "equation-editor",
+  "textdomain": "wp-equation-editor",
   "editorScript": "file:./index.js",
   "editorStyle": "file:./index.css",
   "style": "file:./style-index.css"
