@@ -41,12 +41,20 @@ class Plugin {
 	private TinyMCE $tinymce;
 
 	/**
+	 * Gutenberg block handler instance.
+	 *
+	 * @var Gutenberg
+	 */
+	private Gutenberg $gutenberg;
+
+	/**
 	 * Constructor.
 	 */
 	public function __construct() {
 		$this->settings_handler = new Settings();
 		$this->settings         = get_option( $this->settings_handler->get_option_name(), array() );
 		$this->tinymce          = new TinyMCE( $this->settings );
+		$this->gutenberg        = new Gutenberg( $this->settings );
 	}
 
 	/**
@@ -58,6 +66,10 @@ class Plugin {
 		// TinyMCE hooks.
 		add_filter( 'mce_buttons', array( $this->tinymce, 'add_buttons' ), 0 );
 		add_filter( 'mce_external_plugins', array( $this->tinymce, 'register_plugins' ) );
+
+		// Gutenberg block hooks.
+		add_action( 'init', array( $this->gutenberg, 'register_block' ) );
+		add_action( 'enqueue_block_editor_assets', array( $this->gutenberg, 'enqueue_editor_assets' ) );
 
 		// Admin hooks.
 		add_action( 'admin_menu', array( $this, 'add_menu_page' ) );

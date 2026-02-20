@@ -7,10 +7,12 @@
     <file>./includes</file>
     <file>./uninstall.php</file>
 
-    <!-- Exclude third-party libraries -->
+    <!-- Exclude third-party libraries and build output -->
     <exclude-pattern>./tiny_mce_wiris/*</exclude-pattern>
     <exclude-pattern>./vendor/*</exclude-pattern>
     <exclude-pattern>./tests/*</exclude-pattern>
+    <exclude-pattern>./node_modules/*</exclude-pattern>
+    <exclude-pattern>./build/*</exclude-pattern>
 
     <!-- How to scan -->
     <arg value="sp"/>

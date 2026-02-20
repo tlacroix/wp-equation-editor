@@ -1,0 +1,14 @@
+.wp-block-equation-editor-equation {
+	margin: 1rem 0;
+	overflow-x: auto;
+
+	&.is-display-mode {
+		text-align: center;
+		padding: 1rem 0;
+	}
+
+	&.is-inline-mode {
+		display: inline;
+		margin: 0;
+	}
+}
