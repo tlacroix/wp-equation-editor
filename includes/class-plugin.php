@@ -64,8 +64,9 @@ class Plugin {
 		add_action( 'admin_init', array( $this->settings_handler, 'register' ) );
 		add_filter( 'plugin_action_links_' . EQUATION_EDITOR_BASENAME, array( $this, 'add_settings_link' ) );
 
-		// Activation hook.
+		// Activation and deactivation hooks.
 		register_activation_hook( EQUATION_EDITOR_FILE, array( $this, 'activate' ) );
+		register_deactivation_hook( EQUATION_EDITOR_FILE, array( $this, 'deactivate' ) );
 	}
 
 	/**
@@ -81,6 +82,22 @@ class Plugin {
 		if ( empty( $this->settings['enable_eq_editor'] ) ) {
 			update_option( $this->settings_handler->get_option_name(), $defaults );
 		}
+	}
+
+	/**
+	 * Plugin deactivation hook.
+	 *
+	 * Cleans up temporary data when the plugin is deactivated.
+	 * Note: Settings are preserved. Use uninstall.php for complete removal.
+	 *
+	 * @return void
+	 */
+	public function deactivate(): void {
+		// Clear any transients created by the plugin.
+		delete_transient( 'equation_editor_cache' );
+
+		// Remove any scheduled cron events.
+		wp_clear_scheduled_hook( 'equation_editor_cleanup' );
 	}
 
 	/**
