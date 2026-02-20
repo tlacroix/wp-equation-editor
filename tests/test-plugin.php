@@ -237,4 +237,67 @@ class PluginTest extends WP_UnitTestCase {
 		$settings = get_option( 'mw_equation_editor' );
 		$this->assertEquals( 'latex', $settings['select_eq_editor'] );
 	}
+
+	/**
+	 * Test deactivate clears transients.
+	 */
+	public function test_deactivate_clears_transients() {
+		// Set a transient that would be created by the plugin.
+		set_transient( 'equation_editor_cache', 'test_value', 3600 );
+		$this->assertEquals( 'test_value', get_transient( 'equation_editor_cache' ) );
+
+		$plugin = new Plugin();
+		$plugin->deactivate();
+
+		// Transient should be deleted.
+		$this->assertFalse( get_transient( 'equation_editor_cache' ) );
+	}
+
+	/**
+	 * Test deactivate clears scheduled hooks.
+	 */
+	public function test_deactivate_clears_scheduled_hooks() {
+		// Schedule a hook that would be created by the plugin.
+		wp_schedule_event( time() + 3600, 'hourly', 'equation_editor_cleanup' );
+		$this->assertNotFalse( wp_next_scheduled( 'equation_editor_cleanup' ) );
+
+		$plugin = new Plugin();
+		$plugin->deactivate();
+
+		// Scheduled hook should be cleared.
+		$this->assertFalse( wp_next_scheduled( 'equation_editor_cleanup' ) );
+	}
+
+	/**
+	 * Test deactivate preserves settings.
+	 */
+	public function test_deactivate_preserves_settings() {
+		update_option( 'mw_equation_editor', array(
+			'enable_eq_editor' => '1',
+			'select_eq_editor' => 'latex',
+		) );
+
+		$plugin = new Plugin();
+		$plugin->deactivate();
+
+		// Settings should still exist after deactivation.
+		$settings = get_option( 'mw_equation_editor' );
+		$this->assertIsArray( $settings );
+		$this->assertEquals( 'latex', $settings['select_eq_editor'] );
+	}
+
+	/**
+	 * Test deactivate does not throw errors when no transients exist.
+	 */
+	public function test_deactivate_handles_missing_transients() {
+		// Ensure no transient exists.
+		delete_transient( 'equation_editor_cache' );
+
+		$plugin = new Plugin();
+
+		// This should not throw any errors.
+		$plugin->deactivate();
+
+		$this->assertFalse( get_transient( 'equation_editor_cache' ) );
+	}
 }
