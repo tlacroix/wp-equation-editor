@@ -11,6 +11,10 @@ Thumbs.db
 /vendor/
 composer.lock
 
+# PHPUnit
+.phpunit.result.cache
+phpunit.xml
+
 # Wiris formula cache (generated at runtime)
 tiny_mce_wiris/cache/*
 !tiny_mce_wiris/cache/.htaccess
