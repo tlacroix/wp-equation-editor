@@ -4,7 +4,7 @@
 
     <!-- What to scan -->
     <file>./equation-editor.php</file>
-    <file>./admin</file>
+    <file>./includes</file>
 
     <!-- Exclude third-party libraries -->
     <exclude-pattern>./tiny_mce_wiris/*</exclude-pattern>

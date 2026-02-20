@@ -24,14 +24,22 @@ class AdminTest extends WP_UnitTestCase {
 	private $subscriber_user_id;
 
 	/**
+	 * Settings handler instance.
+	 *
+	 * @var Equation_Editor_Settings
+	 */
+	private $settings;
+
+	/**
 	 * Set up before each test.
 	 */
 	public function set_up() {
 		parent::set_up();
 
 		// Create test users
-		$this->admin_user_id = $this->factory->user->create( array( 'role' => 'administrator' ) );
+		$this->admin_user_id      = $this->factory->user->create( array( 'role' => 'administrator' ) );
 		$this->subscriber_user_id = $this->factory->user->create( array( 'role' => 'subscriber' ) );
+		$this->settings           = new Equation_Editor_Settings();
 	}
 
 	/**
@@ -59,114 +67,104 @@ class AdminTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Test save function requires nonce.
+	 * Test settings sanitization with valid input.
 	 */
-	public function test_save_requires_nonce() {
-		wp_set_current_user( $this->admin_user_id );
+	public function test_sanitize_valid_input() {
+		$input = array(
+			'enable_eq_editor' => '1',
+			'select_eq_editor' => 'latex',
+		);
 
-		$_POST['submit'] = '1';
-		$_POST['enable_eq_editor'] = '1';
-		$_POST['select_eq_editor'] = 'latex';
-		// No nonce set
+		$result = $this->settings->sanitize( $input );
 
-		$editor = new mw_equation_editor();
-
-		// Start output buffering to capture any redirect script
-		ob_start();
-		$editor->save();
-		ob_end_clean();
-
-		// Settings should not be saved without valid nonce
-		$settings = get_option( 'mw_equation_editor' );
-		$this->assertNotEquals( 'latex', $settings['select_eq_editor'] ?? '' );
-
-		unset( $_POST['submit'], $_POST['enable_eq_editor'], $_POST['select_eq_editor'] );
+		$this->assertEquals( '1', $result['enable_eq_editor'] );
+		$this->assertEquals( 'latex', $result['select_eq_editor'] );
 	}
 
 	/**
-	 * Test save function with valid nonce.
+	 * Test that invalid editor type defaults to wiris.
 	 */
-	public function test_save_with_valid_nonce() {
-		wp_set_current_user( $this->admin_user_id );
+	public function test_sanitize_invalid_editor_type_defaults_to_wiris() {
+		$input = array(
+			'enable_eq_editor' => '1',
+			'select_eq_editor' => 'invalid_editor',
+		);
 
-		$_POST['submit'] = '1';
-		$_POST['enable_eq_editor'] = '1';
-		$_POST['select_eq_editor'] = 'latex';
-		$_POST['mw_equation_editor_nonce'] = wp_create_nonce( 'mw_equation_editor_action' );
+		$result = $this->settings->sanitize( $input );
 
-		$editor = new mw_equation_editor();
-		$editor->save();
-
-		// Verify settings were saved (redirect doesn't happen in tests due to headers_sent)
-		$settings = get_option( 'mw_equation_editor' );
-		$this->assertEquals( 'latex', $settings['select_eq_editor'] );
-
-		unset( $_POST['submit'], $_POST['enable_eq_editor'], $_POST['select_eq_editor'], $_POST['mw_equation_editor_nonce'] );
-	}
-
-	/**
-	 * Test that settings are properly sanitized during save.
-	 */
-	public function test_save_stores_settings() {
-		wp_set_current_user( $this->admin_user_id );
-
-		$_POST['submit'] = '1';
-		$_POST['enable_eq_editor'] = '1';
-		$_POST['select_eq_editor'] = 'both';
-		$_POST['mw_equation_editor_nonce'] = wp_create_nonce( 'mw_equation_editor_action' );
-
-		$editor = new mw_equation_editor();
-
-		ob_start();
-		$editor->save();
-		ob_end_clean();
-
-		$settings = get_option( 'mw_equation_editor' );
-		$this->assertEquals( '1', $settings['enable_eq_editor'] );
-		$this->assertEquals( 'both', $settings['select_eq_editor'] );
-
-		unset( $_POST['submit'], $_POST['enable_eq_editor'], $_POST['select_eq_editor'], $_POST['mw_equation_editor_nonce'] );
+		$this->assertEquals( 'wiris', $result['select_eq_editor'] );
 	}
 
 	/**
 	 * Test that checkbox unchecked results in '0' value.
 	 */
-	public function test_save_unchecked_checkbox() {
-		wp_set_current_user( $this->admin_user_id );
-
-		// First, set enabled
-		update_option( 'mw_equation_editor', array(
-			'enable_eq_editor' => '1',
+	public function test_sanitize_unchecked_checkbox() {
+		$input = array(
 			'select_eq_editor' => 'wiris',
-		) );
+			// enable_eq_editor not set (unchecked checkbox)
+		);
 
-		// Now submit without checkbox (simulating unchecked)
-		$_POST['submit'] = '1';
-		$_POST['select_eq_editor'] = 'wiris';
-		$_POST['mw_equation_editor_nonce'] = wp_create_nonce( 'mw_equation_editor_action' );
-		// Note: enable_eq_editor is NOT set (unchecked checkbox)
+		$result = $this->settings->sanitize( $input );
 
-		$editor = new mw_equation_editor();
-		$editor->save();
-
-		$settings = get_option( 'mw_equation_editor' );
-		$this->assertEquals( '0', $settings['enable_eq_editor'] );
-
-		unset( $_POST['submit'], $_POST['select_eq_editor'], $_POST['mw_equation_editor_nonce'] );
+		$this->assertEquals( '0', $result['enable_eq_editor'] );
 	}
 
 	/**
-	 * Test admin page requires manage_options capability.
+	 * Test that sanitization only returns expected keys.
 	 */
-	public function test_admin_page_requires_capability() {
-		// Test with subscriber (no manage_options)
-		wp_set_current_user( $this->subscriber_user_id );
-		set_current_screen( 'admin' );
+	public function test_sanitize_only_returns_expected_keys() {
+		$input = array(
+			'enable_eq_editor' => '1',
+			'select_eq_editor' => 'latex',
+			'malicious_key'    => 'should_not_be_saved',
+			'another_extra'    => 'also_ignored',
+		);
 
-		$editor = new mw_equation_editor();
+		$result = $this->settings->sanitize( $input );
+
+		// Verify only expected keys
+		$this->assertCount( 2, $result );
+		$this->assertArrayHasKey( 'enable_eq_editor', $result );
+		$this->assertArrayHasKey( 'select_eq_editor', $result );
+		$this->assertArrayNotHasKey( 'malicious_key', $result );
+		$this->assertArrayNotHasKey( 'another_extra', $result );
+	}
+
+	/**
+	 * Test that all valid editor types are accepted.
+	 */
+	public function test_sanitize_all_valid_editor_types() {
+		$valid_types = array( 'wiris', 'latex', 'both' );
+
+		foreach ( $valid_types as $type ) {
+			$input  = array(
+				'enable_eq_editor' => '1',
+				'select_eq_editor' => $type,
+			);
+			$result = $this->settings->sanitize( $input );
+			$this->assertEquals( $type, $result['select_eq_editor'] );
+		}
+	}
+
+	/**
+	 * Test settings registration.
+	 */
+	public function test_settings_registration() {
+		global $wp_registered_settings;
+
+		$this->settings->register();
+
+		$this->assertArrayHasKey( 'mw_equation_editor', $wp_registered_settings );
+	}
+
+	/**
+	 * Test render_page requires manage_options capability.
+	 */
+	public function test_render_page_requires_capability() {
+		wp_set_current_user( $this->subscriber_user_id );
 
 		ob_start();
-		$editor->mw_equation_editor_method();
+		$this->settings->render_page();
 		$output = ob_get_clean();
 
 		// Subscriber should not see admin content
@@ -174,75 +172,73 @@ class AdminTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Test admin page loads for administrator.
-	 *
-	 * Note: This test verifies the capability check works correctly.
-	 * The actual admin template loading depends on is_admin() which
-	 * may not return true in all test environments.
+	 * Test render_page shows content for administrators.
 	 */
-	public function test_admin_page_loads_for_admin() {
+	public function test_render_page_shows_for_admin() {
 		wp_set_current_user( $this->admin_user_id );
 
-		// Verify admin has the required capability
-		$this->assertTrue( current_user_can( 'manage_options' ) );
+		ob_start();
+		$this->settings->render_page();
+		$output = ob_get_clean();
+
+		// Admin should see the settings page
+		$this->assertStringContainsString( 'Equation Editor', $output );
+		$this->assertStringContainsString( 'options.php', $output );
 	}
 
 	/**
-	 * Test that admin template file exists and contains nonce.
+	 * Test enable field rendering.
 	 */
-	public function test_admin_template_has_nonce() {
-		$admin_file = dirname( __DIR__ ) . '/admin/mw_equation_editor.php';
-		$this->assertFileExists( $admin_file );
+	public function test_render_enable_field() {
+		update_option( 'mw_equation_editor', array(
+			'enable_eq_editor' => '1',
+			'select_eq_editor' => 'wiris',
+		) );
 
-		$content = file_get_contents( $admin_file );
-		$this->assertStringContainsString( 'mw_equation_editor_nonce', $content );
-		$this->assertStringContainsString( 'mw_equation_editor_action', $content );
+		ob_start();
+		$this->settings->render_enable_field();
+		$output = ob_get_clean();
+
+		$this->assertStringContainsString( 'enable_eq_editor', $output );
+		$this->assertStringContainsString( 'checked', $output );
 	}
 
 	/**
-	 * Test that invalid editor type defaults to wiris.
+	 * Test editor type field rendering.
 	 */
-	public function test_save_invalid_editor_type_defaults_to_wiris() {
-		wp_set_current_user( $this->admin_user_id );
+	public function test_render_editor_type_field() {
+		update_option( 'mw_equation_editor', array(
+			'enable_eq_editor' => '1',
+			'select_eq_editor' => 'latex',
+		) );
 
-		$_POST['submit'] = '1';
-		$_POST['enable_eq_editor'] = '1';
-		$_POST['select_eq_editor'] = 'invalid_editor';
-		$_POST['mw_equation_editor_nonce'] = wp_create_nonce( 'mw_equation_editor_action' );
+		ob_start();
+		$this->settings->render_editor_type_field();
+		$output = ob_get_clean();
 
+		$this->assertStringContainsString( 'select_eq_editor', $output );
+		// Latex should be selected
+		$this->assertMatchesRegularExpression( '/<option[^>]+value="latex"[^>]+selected/', $output );
+	}
+
+	/**
+	 * Test settings link is added to plugin actions.
+	 */
+	public function test_settings_link_added() {
 		$editor = new mw_equation_editor();
-		$editor->save();
 
-		$settings = get_option( 'mw_equation_editor' );
-		$this->assertEquals( 'wiris', $settings['select_eq_editor'] );
+		$links = $editor->add_settings_link( array() );
 
-		unset( $_POST['submit'], $_POST['enable_eq_editor'], $_POST['select_eq_editor'], $_POST['mw_equation_editor_nonce'] );
+		$this->assertCount( 1, $links );
+		$this->assertStringContainsString( 'Settings', $links[0] );
+		$this->assertStringContainsString( 'mw_equation_editor', $links[0] );
 	}
 
 	/**
-	 * Test that save only stores expected keys (no extra POST data).
+	 * Test getters return expected values.
 	 */
-	public function test_save_only_stores_expected_keys() {
-		wp_set_current_user( $this->admin_user_id );
-
-		$_POST['submit'] = '1';
-		$_POST['enable_eq_editor'] = '1';
-		$_POST['select_eq_editor'] = 'latex';
-		$_POST['malicious_key'] = 'should_not_be_saved';
-		$_POST['another_extra'] = 'also_ignored';
-		$_POST['mw_equation_editor_nonce'] = wp_create_nonce( 'mw_equation_editor_action' );
-
-		$editor = new mw_equation_editor();
-		$editor->save();
-
-		$settings = get_option( 'mw_equation_editor' );
-		// Verify only expected keys were saved
-		$this->assertCount( 2, $settings );
-		$this->assertArrayHasKey( 'enable_eq_editor', $settings );
-		$this->assertArrayHasKey( 'select_eq_editor', $settings );
-		$this->assertArrayNotHasKey( 'malicious_key', $settings );
-		$this->assertArrayNotHasKey( 'another_extra', $settings );
-
-		unset( $_POST['submit'], $_POST['enable_eq_editor'], $_POST['select_eq_editor'], $_POST['malicious_key'], $_POST['another_extra'], $_POST['mw_equation_editor_nonce'] );
+	public function test_settings_getters() {
+		$this->assertEquals( 'mw_equation_editor', $this->settings->get_option_name() );
+		$this->assertEquals( 'mw_equation_editor', $this->settings->get_page_slug() );
 	}
 }
