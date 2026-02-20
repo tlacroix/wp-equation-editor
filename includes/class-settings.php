@@ -77,7 +77,7 @@ class Settings {
 
 		add_settings_field(
 			'enable_eq_editor',
-			__( 'Enable Equation Editor', 'equation-editor' ),
+			__( 'Enable Equation Editor', 'wp-equation-editor' ),
 			array( $this, 'render_enable_field' ),
 			$this->page_slug,
 			'equation_editor_main',
@@ -86,7 +86,7 @@ class Settings {
 
 		add_settings_field(
 			'select_eq_editor',
-			__( 'Select Editor Type', 'equation-editor' ),
+			__( 'Select Editor Type', 'wp-equation-editor' ),
 			array( $this, 'render_editor_type_field' ),
 			$this->page_slug,
 			'equation_editor_main',
@@ -126,24 +126,24 @@ class Settings {
 			add_settings_error(
 				$this->option_name,
 				'settings_updated',
-				__( 'Settings saved.', 'equation-editor' ),
+				__( 'Settings saved.', 'wp-equation-editor' ),
 				'updated'
 			);
 		}
 		?>
 		<div class="wrap">
-			<h1><?php esc_html_e( 'Equation Editor', 'equation-editor' ); ?></h1>
+			<h1><?php esc_html_e( 'Equation Editor', 'wp-equation-editor' ); ?></h1>
 			<?php settings_errors( $this->option_name ); ?>
 			<form action="options.php" method="post">
 				<?php
 				settings_fields( $this->option_group );
 				do_settings_sections( $this->page_slug );
-				submit_button( __( 'Save Changes', 'equation-editor' ) );
+				submit_button( __( 'Save Changes', 'wp-equation-editor' ) );
 				?>
 			</form>
 			<p>
-				<a href="https://wordpress.org/support/plugin/equation-editor/reviews/?filter=5" target="_blank"><?php esc_html_e( 'Rate this plugin', 'equation-editor' ); ?></a> |
-				<a href="https://wordpress.org/support/plugin/equation-editor/" target="_blank"><?php esc_html_e( 'Support', 'equation-editor' ); ?></a>
+				<a href="https://wordpress.org/support/plugin/wp-equation-editor/reviews/" target="_blank"><?php esc_html_e( 'Rate this plugin', 'wp-equation-editor' ); ?></a> |
+				<a href="https://wordpress.org/support/plugin/wp-equation-editor/" target="_blank"><?php esc_html_e( 'Support', 'wp-equation-editor' ); ?></a>
 			</p>
 		</div>
 		<?php
@@ -160,7 +160,7 @@ class Settings {
 		?>
 		<input type="checkbox" name="<?php echo esc_attr( $this->option_name ); ?>[enable_eq_editor]"
 			id="enable_eq_editor" value="1" <?php checked( $enabled, '1' ); ?>>
-		<?php esc_html_e( 'Check to enable Equation Editor', 'equation-editor' ); ?>
+		<?php esc_html_e( 'Check to enable Equation Editor', 'wp-equation-editor' ); ?>
 		<?php
 	}
 
@@ -174,11 +174,11 @@ class Settings {
 		$editor_type = $settings['select_eq_editor'] ?? 'wiris';
 		?>
 		<select name="<?php echo esc_attr( $this->option_name ); ?>[select_eq_editor]" id="select_eq_editor">
-			<option value="wiris" <?php selected( $editor_type, 'wiris' ); ?>><?php esc_html_e( 'Wiris Editor', 'equation-editor' ); ?></option>
-			<option value="latex" <?php selected( $editor_type, 'latex' ); ?>><?php esc_html_e( 'Latex Editor', 'equation-editor' ); ?></option>
-			<option value="both" <?php selected( $editor_type, 'both' ); ?>><?php esc_html_e( 'Both', 'equation-editor' ); ?></option>
+			<option value="wiris" <?php selected( $editor_type, 'wiris' ); ?>><?php esc_html_e( 'Wiris Editor', 'wp-equation-editor' ); ?></option>
+			<option value="latex" <?php selected( $editor_type, 'latex' ); ?>><?php esc_html_e( 'Latex Editor', 'wp-equation-editor' ); ?></option>
+			<option value="both" <?php selected( $editor_type, 'both' ); ?>><?php esc_html_e( 'Both', 'wp-equation-editor' ); ?></option>
 		</select>
-		<p class="description"><?php esc_html_e( 'Default: Wiris Editor', 'equation-editor' ); ?></p>
+		<p class="description"><?php esc_html_e( 'Default: Wiris Editor', 'wp-equation-editor' ); ?></p>
 		<?php
 	}
 

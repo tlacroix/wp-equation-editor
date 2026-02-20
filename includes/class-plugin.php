@@ -119,8 +119,8 @@ class Plugin {
 	 */
 	public function add_menu_page(): void {
 		add_menu_page(
-			__( 'Equation Editor', 'equation-editor' ),
-			__( 'Equation Editor', 'equation-editor' ),
+			__( 'Equation Editor', 'wp-equation-editor' ),
+			__( 'Equation Editor', 'wp-equation-editor' ),
 			'manage_options',
 			$this->settings_handler->get_page_slug(),
 			array( $this->settings_handler, 'render_page' ),
@@ -136,7 +136,7 @@ class Plugin {
 	 */
 	public function add_settings_link( array $links ): array {
 		$settings_link = '<a href="' . esc_url( admin_url( 'admin.php?page=' . $this->settings_handler->get_page_slug() ) ) . '">'
-			. esc_html__( 'Settings', 'equation-editor' ) . '</a>';
+			. esc_html__( 'Settings', 'wp-equation-editor' ) . '</a>';
 		array_unshift( $links, $settings_link );
 		return $links;
 	}

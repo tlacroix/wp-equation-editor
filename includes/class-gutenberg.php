@@ -112,14 +112,14 @@ class Gutenberg {
 
 		wp_enqueue_style(
 			'katex',
-			'https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css',
+			EQUATION_EDITOR_URL . 'vendor/katex/katex.min.css',
 			array(),
 			'0.16.9'
 		);
 
 		wp_enqueue_script(
 			'katex',
-			'https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js',
+			EQUATION_EDITOR_URL . 'vendor/katex/katex.min.js',
 			array(),
 			'0.16.9',
 			true
@@ -148,14 +148,14 @@ class Gutenberg {
 
 		wp_enqueue_style(
 			'katex',
-			'https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css',
+			EQUATION_EDITOR_URL . 'vendor/katex/katex.min.css',
 			array(),
 			'0.16.9'
 		);
 
 		wp_enqueue_script(
 			'katex',
-			'https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js',
+			EQUATION_EDITOR_URL . 'vendor/katex/katex.min.js',
 			array(),
 			'0.16.9',
 			true

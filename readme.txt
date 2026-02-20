@@ -1,16 +1,18 @@
 === Equation Editor ===
 Contributors: modalweb, nuagelab
-Tags: equation, math, latex, katex, gutenberg, block, tinymce, formula, chemistry, wiris
-Requires at least: 6.0
-Tested up to: 6.7
+Tags: equation, math, latex, katex, gutenberg
+Requires at least: 6.7
+Tested up to: 6.9
 Stable tag: 2.1.0
 Requires PHP: 8.0
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Add mathematical equations to WordPress using LaTeX syntax. Supports both the Block Editor (Gutenberg) and Classic Editor (TinyMCE).
+Add mathematical equations to WordPress using LaTeX. Supports Block Editor and Classic Editor.
 
 == Description ==
+
+This plugin is based on the now deleted equation-editor plugin.
 
 Equation Editor makes it easy to add beautiful mathematical, physics, and chemistry equations to your WordPress posts and pages.
 
