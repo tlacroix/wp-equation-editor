@@ -11,7 +11,7 @@
 set -e
 
 # Configuration
-PLUGIN_SLUG="wp-equation-editor"
+PLUGIN_SLUG="nuagelab-equation-editor"
 BUNDLE_DIR="wordpress-submission"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
@@ -37,8 +37,8 @@ mkdir -p "$BUNDLE_DIR/$PLUGIN_SLUG"
 
 echo "Copying plugin files..."
 
-# Main plugin file
-cp wp-equation-editor.php "$BUNDLE_DIR/$PLUGIN_SLUG/"
+# Main plugin file (renamed to match plugin slug)
+cp wp-equation-editor.php "$BUNDLE_DIR/$PLUGIN_SLUG/$PLUGIN_SLUG.php"
 
 # Readme and uninstall
 cp readme.txt "$BUNDLE_DIR/$PLUGIN_SLUG/"
@@ -47,8 +47,9 @@ cp uninstall.php "$BUNDLE_DIR/$PLUGIN_SLUG/"
 # PHP includes
 cp -r includes "$BUNDLE_DIR/$PLUGIN_SLUG/"
 
-# Assets (JS/CSS source files)
-cp -r assets "$BUNDLE_DIR/$PLUGIN_SLUG/"
+# Assets - only JS needed for Classic Editor
+mkdir -p "$BUNDLE_DIR/$PLUGIN_SLUG/assets/js"
+cp assets/js/eq_editor.js "$BUNDLE_DIR/$PLUGIN_SLUG/assets/js/"
 
 # Build directory (compiled block assets)
 cp -r build "$BUNDLE_DIR/$PLUGIN_SLUG/"
@@ -63,9 +64,6 @@ cp vendor/katex/katex.min.js "$BUNDLE_DIR/$PLUGIN_SLUG/vendor/katex/"
 cp vendor/katex/LICENSE "$BUNDLE_DIR/$PLUGIN_SLUG/vendor/katex/"
 cp vendor/katex/fonts/* "$BUNDLE_DIR/$PLUGIN_SLUG/vendor/katex/fonts/"
 
-# Third-party Wiris editor
-cp -r tiny_mce_wiris "$BUNDLE_DIR/$PLUGIN_SLUG/"
-
 # Clean up unwanted files from the bundle
 echo "Cleaning up development files..."
 
@@ -77,13 +75,6 @@ find "$BUNDLE_DIR" -name ".gitkeep" -delete 2>/dev/null || true
 
 # Remove all hidden files (not allowed by WordPress)
 find "$BUNDLE_DIR" -name ".*" -type f -delete 2>/dev/null || true
-find "$BUNDLE_DIR" -name "*.swp" -delete 2>/dev/null || true
-find "$BUNDLE_DIR" -name "*.dist" -delete 2>/dev/null || true
-
-# Clear Wiris cache directory entirely
-if [ -d "$BUNDLE_DIR/$PLUGIN_SLUG/tiny_mce_wiris/cache" ]; then
-    rm -rf "$BUNDLE_DIR/$PLUGIN_SLUG/tiny_mce_wiris/cache"
-fi
 
 # Create zip file
 echo "Creating zip archive..."
