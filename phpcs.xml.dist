@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<ruleset name="Equation Editor">
+    <description>PHP_CodeSniffer rules for Equation Editor plugin.</description>
+
+    <!-- What to scan -->
+    <file>./equation-editor.php</file>
+    <file>./admin</file>
+
+    <!-- Exclude third-party libraries -->
+    <exclude-pattern>./tiny_mce_wiris/*</exclude-pattern>
+    <exclude-pattern>./vendor/*</exclude-pattern>
+    <exclude-pattern>./tests/*</exclude-pattern>
+
+    <!-- How to scan -->
+    <arg value="sp"/>
+    <arg name="basepath" value="."/>
+    <arg name="colors"/>
+    <arg name="extensions" value="php"/>
+    <arg name="parallel" value="8"/>
+
+    <!-- Use WordPress-Core as base (less strict than full WordPress standard) -->
+    <rule ref="WordPress-Core">
+        <!-- Allow short array syntax -->
+        <exclude name="Universal.Arrays.DisallowShortArraySyntax"/>
+        <!-- Relax formatting rules for legacy code -->
+        <exclude name="WordPress.Files.FileName"/>
+        <exclude name="Squiz.Commenting"/>
+        <exclude name="Generic.Files.LineEndings"/>
+        <exclude name="Generic.ControlStructures.InlineControlStructure"/>
+        <exclude name="Squiz.PHP.EmbeddedPhp"/>
+        <exclude name="PEAR.Functions.FunctionCallSignature"/>
+        <exclude name="Generic.WhiteSpace"/>
+        <exclude name="WordPress.WhiteSpace"/>
+        <exclude name="Squiz.ControlStructures"/>
+        <exclude name="Squiz.Functions.FunctionDeclarationArgumentSpacing"/>
+        <exclude name="NormalizedArrays.Arrays.ArrayBraceSpacing"/>
+        <exclude name="Universal.WhiteSpace.PrecisionAlignment"/>
+        <exclude name="Generic.Formatting.MultipleStatementAlignment"/>
+        <exclude name="PSR2.Files.EndFileNewline"/>
+        <exclude name="PEAR.NamingConventions.ValidClassName"/>
+        <exclude name="WordPress.PHP.YodaConditions"/>
+        <exclude name="Universal.Operators.StrictComparisons"/>
+        <exclude name="WordPress.WP.CapitalPDangit"/>
+    </rule>
+
+    <!-- Text domain -->
+    <rule ref="WordPress.WP.I18n">
+        <properties>
+            <property name="text_domain" type="array">
+                <element value="equation-editor"/>
+            </property>
+        </properties>
+    </rule>
+
+    <!-- Minimum supported PHP version -->
+    <config name="testVersion" value="8.0-"/>
+</ruleset>

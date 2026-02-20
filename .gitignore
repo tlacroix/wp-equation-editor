@@ -2,6 +2,11 @@
 .DS_Store
 Thumbs.db
 
+# Editor swap/temp files
+*.swp
+*.swo
+*~
+
 # IDE/Editor
 .idea/
 .vscode/

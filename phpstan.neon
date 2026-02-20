@@ -1,0 +1,16 @@
+includes:
+    - vendor/szepeviktor/phpstan-wordpress/extension.neon
+
+parameters:
+    level: 5
+    paths:
+        - equation-editor.php
+        - admin
+    excludePaths:
+        - tiny_mce_wiris
+        - vendor
+        - tests
+    ignoreErrors:
+        # Admin template is included within class context
+        - '#Variable \$this might not be defined#'
+    reportUnmatchedIgnoredErrors: false
