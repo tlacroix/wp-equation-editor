@@ -95,14 +95,11 @@ class AdminTest extends WP_UnitTestCase {
 		$_POST['mw_equation_editor_nonce'] = wp_create_nonce( 'mw_equation_editor_action' );
 
 		$editor = new mw_equation_editor();
-
-		// Start output buffering to capture redirect script
-		ob_start();
 		$editor->save();
-		$output = ob_get_clean();
 
-		// Check that redirect script was output (indicates success)
-		$this->assertStringContainsString( 'window.location.href', $output );
+		// Verify settings were saved (redirect doesn't happen in tests due to headers_sent)
+		$settings = get_option( 'mw_equation_editor' );
+		$this->assertEquals( 'latex', $settings['select_eq_editor'] );
 
 		unset( $_POST['submit'], $_POST['enable_eq_editor'], $_POST['select_eq_editor'], $_POST['mw_equation_editor_nonce'] );
 	}
@@ -132,7 +129,7 @@ class AdminTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Test that checkbox unchecked results in no value.
+	 * Test that checkbox unchecked results in '0' value.
 	 */
 	public function test_save_unchecked_checkbox() {
 		wp_set_current_user( $this->admin_user_id );
@@ -150,13 +147,10 @@ class AdminTest extends WP_UnitTestCase {
 		// Note: enable_eq_editor is NOT set (unchecked checkbox)
 
 		$editor = new mw_equation_editor();
-
-		ob_start();
 		$editor->save();
-		ob_end_clean();
 
 		$settings = get_option( 'mw_equation_editor' );
-		$this->assertArrayNotHasKey( 'enable_eq_editor', $settings );
+		$this->assertEquals( '0', $settings['enable_eq_editor'] );
 
 		unset( $_POST['submit'], $_POST['select_eq_editor'], $_POST['mw_equation_editor_nonce'] );
 	}
@@ -206,23 +200,49 @@ class AdminTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Test redirect URL escaping.
+	 * Test that invalid editor type defaults to wiris.
 	 */
-	public function test_redirect_escapes_url() {
+	public function test_save_invalid_editor_type_defaults_to_wiris() {
+		wp_set_current_user( $this->admin_user_id );
+
+		$_POST['submit'] = '1';
+		$_POST['enable_eq_editor'] = '1';
+		$_POST['select_eq_editor'] = 'invalid_editor';
+		$_POST['mw_equation_editor_nonce'] = wp_create_nonce( 'mw_equation_editor_action' );
+
 		$editor = new mw_equation_editor();
+		$editor->save();
 
-		// Use reflection to access private method
-		$reflection = new ReflectionClass( $editor );
-		$method = $reflection->getMethod( 'redirect' );
-		$method->setAccessible( true );
+		$settings = get_option( 'mw_equation_editor' );
+		$this->assertEquals( 'wiris', $settings['select_eq_editor'] );
 
-		ob_start();
-		$method->invoke( $editor, '?page=test&param=value' );
-		$output = ob_get_clean();
+		unset( $_POST['submit'], $_POST['enable_eq_editor'], $_POST['select_eq_editor'], $_POST['mw_equation_editor_nonce'] );
+	}
 
-		$this->assertStringContainsString( 'window.location.href', $output );
-		// esc_js() HTML-encodes & as &amp;
-		$this->assertStringContainsString( 'page=test', $output );
-		$this->assertStringContainsString( 'param=value', $output );
+	/**
+	 * Test that save only stores expected keys (no extra POST data).
+	 */
+	public function test_save_only_stores_expected_keys() {
+		wp_set_current_user( $this->admin_user_id );
+
+		$_POST['submit'] = '1';
+		$_POST['enable_eq_editor'] = '1';
+		$_POST['select_eq_editor'] = 'latex';
+		$_POST['malicious_key'] = 'should_not_be_saved';
+		$_POST['another_extra'] = 'also_ignored';
+		$_POST['mw_equation_editor_nonce'] = wp_create_nonce( 'mw_equation_editor_action' );
+
+		$editor = new mw_equation_editor();
+		$editor->save();
+
+		$settings = get_option( 'mw_equation_editor' );
+		// Verify only expected keys were saved
+		$this->assertCount( 2, $settings );
+		$this->assertArrayHasKey( 'enable_eq_editor', $settings );
+		$this->assertArrayHasKey( 'select_eq_editor', $settings );
+		$this->assertArrayNotHasKey( 'malicious_key', $settings );
+		$this->assertArrayNotHasKey( 'another_extra', $settings );
+
+		unset( $_POST['submit'], $_POST['enable_eq_editor'], $_POST['select_eq_editor'], $_POST['malicious_key'], $_POST['another_extra'], $_POST['mw_equation_editor_nonce'] );
 	}
 }
