@@ -7,6 +7,9 @@
  * @package Equation_Editor
  */
 
+use Equation_Editor\Plugin;
+use Equation_Editor\Settings;
+
 class AdminTest extends WP_UnitTestCase {
 
 	/**
@@ -26,7 +29,7 @@ class AdminTest extends WP_UnitTestCase {
 	/**
 	 * Settings handler instance.
 	 *
-	 * @var Equation_Editor_Settings
+	 * @var Settings
 	 */
 	private $settings;
 
@@ -39,7 +42,7 @@ class AdminTest extends WP_UnitTestCase {
 		// Create test users
 		$this->admin_user_id      = $this->factory->user->create( array( 'role' => 'administrator' ) );
 		$this->subscriber_user_id = $this->factory->user->create( array( 'role' => 'subscriber' ) );
-		$this->settings           = new Equation_Editor_Settings();
+		$this->settings           = new Settings();
 	}
 
 	/**
@@ -57,8 +60,8 @@ class AdminTest extends WP_UnitTestCase {
 	public function test_admin_menu_page_added() {
 		wp_set_current_user( $this->admin_user_id );
 
-		$editor = new mw_equation_editor();
-		$editor->mw_equation_menu_page();
+		$plugin = new Plugin();
+		$plugin->add_menu_page();
 
 		// Check menu page exists
 		global $menu;
@@ -225,9 +228,9 @@ class AdminTest extends WP_UnitTestCase {
 	 * Test settings link is added to plugin actions.
 	 */
 	public function test_settings_link_added() {
-		$editor = new mw_equation_editor();
+		$plugin = new Plugin();
 
-		$links = $editor->add_settings_link( array() );
+		$links = $plugin->add_settings_link( array() );
 
 		$this->assertCount( 1, $links );
 		$this->assertStringContainsString( 'Settings', $links[0] );

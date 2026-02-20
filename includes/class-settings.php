@@ -4,9 +4,11 @@
  *
  * Handles WordPress Settings API registration and rendering.
  *
- * @package EquationEditor
+ * @package Equation_Editor
  * @since   1.9.0
  */
+
+namespace Equation_Editor;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -17,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 1.9.0
  */
-class Equation_Editor_Settings {
+class Settings {
 
 	/**
 	 * Option name in the database.
