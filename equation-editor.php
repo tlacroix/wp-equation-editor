@@ -80,7 +80,8 @@ if(!class_exists('mw_equation_editor')) {
         }
 
         public function save(): void {
-            if (isset($_POST['submit']) && wp_verify_nonce($_POST['mw_equation_editor_nonce'], 'mw_equation_editor_action')) {
+            $nonce = isset($_POST['mw_equation_editor_nonce']) ? sanitize_text_field(wp_unslash($_POST['mw_equation_editor_nonce'])) : '';
+            if (isset($_POST['submit']) && wp_verify_nonce($nonce, 'mw_equation_editor_action')) {
                 $set = update_option($this->option, $_POST);
                 $this->redirect($set ? '?page=mw_equation_editor&s=y' : '?page=mw_equation_editor&s=n');
             }
