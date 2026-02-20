@@ -5,6 +5,9 @@
  * @package Equation_Editor
  */
 
+use Equation_Editor\Plugin;
+use Equation_Editor\TinyMCE;
+
 class EquationEditorTest extends WP_UnitTestCase {
 
 	/**
@@ -19,7 +22,14 @@ class EquationEditorTest extends WP_UnitTestCase {
 	 * Test that the plugin class exists.
 	 */
 	public function test_plugin_class_exists() {
-		$this->assertTrue( class_exists( 'mw_equation_editor' ) );
+		$this->assertTrue( class_exists( 'Equation_Editor\Plugin' ) );
+	}
+
+	/**
+	 * Test that TinyMCE class exists.
+	 */
+	public function test_tinymce_class_exists() {
+		$this->assertTrue( class_exists( 'Equation_Editor\TinyMCE' ) );
 	}
 
 	/**
@@ -44,47 +54,47 @@ class EquationEditorTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Test equation_add_button adds wiris buttons when wiris is selected.
+	 * Test add_buttons adds wiris buttons when wiris is selected.
 	 */
-	public function test_equation_add_button_wiris() {
-		update_option( 'mw_equation_editor', array(
+	public function test_add_buttons_wiris() {
+		$settings = array(
 			'enable_eq_editor' => '1',
 			'select_eq_editor' => 'wiris',
-		) );
+		);
 
-		$editor = new mw_equation_editor();
-		$buttons = $editor->equation_add_button( array() );
+		$tinymce = new TinyMCE( $settings );
+		$buttons = $tinymce->add_buttons( array() );
 
 		$this->assertContains( 'tiny_mce_wiris_formulaEditor', $buttons );
 		$this->assertContains( 'tiny_mce_wiris_formulaEditorChemistry', $buttons );
 	}
 
 	/**
-	 * Test equation_add_button adds latex button when latex is selected.
+	 * Test add_buttons adds latex button when latex is selected.
 	 */
-	public function test_equation_add_button_latex() {
-		update_option( 'mw_equation_editor', array(
+	public function test_add_buttons_latex() {
+		$settings = array(
 			'enable_eq_editor' => '1',
 			'select_eq_editor' => 'latex',
-		) );
+		);
 
-		$editor = new mw_equation_editor();
-		$buttons = $editor->equation_add_button( array() );
+		$tinymce = new TinyMCE( $settings );
+		$buttons = $tinymce->add_buttons( array() );
 
 		$this->assertContains( 'equation', $buttons );
 	}
 
 	/**
-	 * Test equation_add_button adds both when both is selected.
+	 * Test add_buttons adds both when both is selected.
 	 */
-	public function test_equation_add_button_both() {
-		update_option( 'mw_equation_editor', array(
+	public function test_add_buttons_both() {
+		$settings = array(
 			'enable_eq_editor' => '1',
 			'select_eq_editor' => 'both',
-		) );
+		);
 
-		$editor = new mw_equation_editor();
-		$buttons = $editor->equation_add_button( array() );
+		$tinymce = new TinyMCE( $settings );
+		$buttons = $tinymce->add_buttons( array() );
 
 		$this->assertContains( 'equation', $buttons );
 		$this->assertContains( 'tiny_mce_wiris_formulaEditor', $buttons );
@@ -94,61 +104,61 @@ class EquationEditorTest extends WP_UnitTestCase {
 	/**
 	 * Test that buttons are not added when disabled.
 	 */
-	public function test_equation_add_button_disabled() {
-		update_option( 'mw_equation_editor', array(
+	public function test_add_buttons_disabled() {
+		$settings = array(
 			'enable_eq_editor' => '0',
 			'select_eq_editor' => 'wiris',
-		) );
+		);
 
-		$editor = new mw_equation_editor();
-		$buttons = $editor->equation_add_button( array() );
+		$tinymce = new TinyMCE( $settings );
+		$buttons = $tinymce->add_buttons( array() );
 
 		$this->assertNull( $buttons );
 	}
 
 	/**
-	 * Test equation_editor_register adds wiris plugin when wiris is selected.
+	 * Test register_plugins adds wiris plugin when wiris is selected.
 	 */
-	public function test_equation_editor_register_wiris() {
-		update_option( 'mw_equation_editor', array(
+	public function test_register_plugins_wiris() {
+		$settings = array(
 			'enable_eq_editor' => '1',
 			'select_eq_editor' => 'wiris',
-		) );
+		);
 
-		$editor = new mw_equation_editor();
-		$plugins = $editor->equation_editor_register( array() );
+		$tinymce = new TinyMCE( $settings );
+		$plugins = $tinymce->register_plugins( array() );
 
 		$this->assertArrayHasKey( 'tiny_mce_wiris', $plugins );
 		$this->assertStringContainsString( 'tiny_mce_wiris/editor_plugin.js', $plugins['tiny_mce_wiris'] );
 	}
 
 	/**
-	 * Test equation_editor_register adds latex plugin when latex is selected.
+	 * Test register_plugins adds latex plugin when latex is selected.
 	 */
-	public function test_equation_editor_register_latex() {
-		update_option( 'mw_equation_editor', array(
+	public function test_register_plugins_latex() {
+		$settings = array(
 			'enable_eq_editor' => '1',
 			'select_eq_editor' => 'latex',
-		) );
+		);
 
-		$editor = new mw_equation_editor();
-		$plugins = $editor->equation_editor_register( array() );
+		$tinymce = new TinyMCE( $settings );
+		$plugins = $tinymce->register_plugins( array() );
 
 		$this->assertArrayHasKey( 'equation', $plugins );
-		$this->assertStringContainsString( 'js/eq_editor.js', $plugins['equation'] );
+		$this->assertStringContainsString( 'assets/js/eq_editor.js', $plugins['equation'] );
 	}
 
 	/**
-	 * Test equation_editor_register adds both plugins when both is selected.
+	 * Test register_plugins adds both plugins when both is selected.
 	 */
-	public function test_equation_editor_register_both() {
-		update_option( 'mw_equation_editor', array(
+	public function test_register_plugins_both() {
+		$settings = array(
 			'enable_eq_editor' => '1',
 			'select_eq_editor' => 'both',
-		) );
+		);
 
-		$editor = new mw_equation_editor();
-		$plugins = $editor->equation_editor_register( array() );
+		$tinymce = new TinyMCE( $settings );
+		$plugins = $tinymce->register_plugins( array() );
 
 		$this->assertArrayHasKey( 'equation', $plugins );
 		$this->assertArrayHasKey( 'tiny_mce_wiris', $plugins );
@@ -157,15 +167,15 @@ class EquationEditorTest extends WP_UnitTestCase {
 	/**
 	 * Test that existing buttons are preserved when adding new ones.
 	 */
-	public function test_equation_add_button_preserves_existing() {
-		update_option( 'mw_equation_editor', array(
+	public function test_add_buttons_preserves_existing() {
+		$settings = array(
 			'enable_eq_editor' => '1',
 			'select_eq_editor' => 'latex',
-		) );
+		);
 
-		$editor = new mw_equation_editor();
+		$tinymce = new TinyMCE( $settings );
 		$existing_buttons = array( 'bold', 'italic', 'underline' );
-		$buttons = $editor->equation_add_button( $existing_buttons );
+		$buttons = $tinymce->add_buttons( $existing_buttons );
 
 		$this->assertContains( 'bold', $buttons );
 		$this->assertContains( 'italic', $buttons );
@@ -176,15 +186,15 @@ class EquationEditorTest extends WP_UnitTestCase {
 	/**
 	 * Test that existing plugins are preserved when registering new ones.
 	 */
-	public function test_equation_editor_register_preserves_existing() {
-		update_option( 'mw_equation_editor', array(
+	public function test_register_plugins_preserves_existing() {
+		$settings = array(
 			'enable_eq_editor' => '1',
 			'select_eq_editor' => 'latex',
-		) );
+		);
 
-		$editor = new mw_equation_editor();
+		$tinymce = new TinyMCE( $settings );
 		$existing_plugins = array( 'some_plugin' => 'some_plugin.js' );
-		$plugins = $editor->equation_editor_register( $existing_plugins );
+		$plugins = $tinymce->register_plugins( $existing_plugins );
 
 		$this->assertArrayHasKey( 'some_plugin', $plugins );
 		$this->assertArrayHasKey( 'equation', $plugins );
@@ -193,14 +203,14 @@ class EquationEditorTest extends WP_UnitTestCase {
 	/**
 	 * Test separator is added before buttons.
 	 */
-	public function test_equation_add_button_includes_separator() {
-		update_option( 'mw_equation_editor', array(
+	public function test_add_buttons_includes_separator() {
+		$settings = array(
 			'enable_eq_editor' => '1',
 			'select_eq_editor' => 'latex',
-		) );
+		);
 
-		$editor = new mw_equation_editor();
-		$buttons = $editor->equation_add_button( array() );
+		$tinymce = new TinyMCE( $settings );
+		$buttons = $tinymce->add_buttons( array() );
 
 		$this->assertContains( 'separator', $buttons );
 	}
@@ -208,11 +218,11 @@ class EquationEditorTest extends WP_UnitTestCase {
 	/**
 	 * Test behavior with empty/missing settings.
 	 */
-	public function test_equation_add_button_with_no_settings() {
-		delete_option( 'mw_equation_editor' );
+	public function test_add_buttons_with_no_settings() {
+		$settings = array();
 
-		$editor = new mw_equation_editor();
-		$buttons = $editor->equation_add_button( array( 'bold' ) );
+		$tinymce = new TinyMCE( $settings );
+		$buttons = $tinymce->add_buttons( array( 'bold' ) );
 
 		// Should return null when settings don't exist
 		$this->assertNull( $buttons );
@@ -221,15 +231,15 @@ class EquationEditorTest extends WP_UnitTestCase {
 	/**
 	 * Test behavior with invalid editor type.
 	 */
-	public function test_equation_add_button_with_invalid_editor_type() {
-		update_option( 'mw_equation_editor', array(
+	public function test_add_buttons_with_invalid_editor_type() {
+		$settings = array(
 			'enable_eq_editor' => '1',
 			'select_eq_editor' => 'invalid_type',
-		) );
+		);
 
-		$editor = new mw_equation_editor();
+		$tinymce = new TinyMCE( $settings );
 		$existing_buttons = array( 'bold' );
-		$buttons = $editor->equation_add_button( $existing_buttons );
+		$buttons = $tinymce->add_buttons( $existing_buttons );
 
 		// Should return original buttons unchanged for invalid type
 		$this->assertEquals( array( 'bold' ), $buttons );
@@ -238,14 +248,14 @@ class EquationEditorTest extends WP_UnitTestCase {
 	/**
 	 * Test behavior when editor is enabled but no type selected.
 	 */
-	public function test_equation_add_button_enabled_no_type() {
-		update_option( 'mw_equation_editor', array(
+	public function test_add_buttons_enabled_no_type() {
+		$settings = array(
 			'enable_eq_editor' => '1',
-		) );
+		);
 
-		$editor = new mw_equation_editor();
+		$tinymce = new TinyMCE( $settings );
 		$existing_buttons = array( 'bold' );
-		$buttons = $editor->equation_add_button( $existing_buttons );
+		$buttons = $tinymce->add_buttons( $existing_buttons );
 
 		// Should return original buttons when type is missing
 		$this->assertEquals( array( 'bold' ), $buttons );
@@ -254,14 +264,14 @@ class EquationEditorTest extends WP_UnitTestCase {
 	/**
 	 * Test that plugins are not registered when disabled.
 	 */
-	public function test_equation_editor_register_disabled() {
-		update_option( 'mw_equation_editor', array(
+	public function test_register_plugins_disabled() {
+		$settings = array(
 			'enable_eq_editor' => '0',
 			'select_eq_editor' => 'wiris',
-		) );
+		);
 
-		$editor = new mw_equation_editor();
-		$plugins = $editor->equation_editor_register( array() );
+		$tinymce = new TinyMCE( $settings );
+		$plugins = $tinymce->register_plugins( array() );
 
 		$this->assertArrayNotHasKey( 'tiny_mce_wiris', $plugins );
 		$this->assertArrayNotHasKey( 'equation', $plugins );
@@ -271,13 +281,13 @@ class EquationEditorTest extends WP_UnitTestCase {
 	 * Test plugin URLs contain expected paths.
 	 */
 	public function test_plugin_urls_are_valid() {
-		update_option( 'mw_equation_editor', array(
+		$settings = array(
 			'enable_eq_editor' => '1',
 			'select_eq_editor' => 'both',
-		) );
+		);
 
-		$editor = new mw_equation_editor();
-		$plugins = $editor->equation_editor_register( array() );
+		$tinymce = new TinyMCE( $settings );
+		$plugins = $tinymce->register_plugins( array() );
 
 		// URLs should be absolute (contain http)
 		$this->assertMatchesRegularExpression( '/^https?:\/\//', $plugins['equation'] );
@@ -290,8 +300,8 @@ class EquationEditorTest extends WP_UnitTestCase {
 	public function test_activation_sets_defaults() {
 		delete_option( 'mw_equation_editor' );
 
-		$editor = new mw_equation_editor();
-		$editor->mw_equation_install();
+		$plugin = new Plugin();
+		$plugin->activate();
 
 		$settings = get_option( 'mw_equation_editor' );
 		$this->assertIsArray( $settings );
@@ -308,8 +318,8 @@ class EquationEditorTest extends WP_UnitTestCase {
 			'select_eq_editor' => 'latex',
 		) );
 
-		$editor = new mw_equation_editor();
-		$editor->mw_equation_install();
+		$plugin = new Plugin();
+		$plugin->activate();
 
 		$settings = get_option( 'mw_equation_editor' );
 		$this->assertEquals( 'latex', $settings['select_eq_editor'] );
