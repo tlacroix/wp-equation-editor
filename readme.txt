@@ -4,6 +4,7 @@ Tags: maths editor, physics editor, equation editor, TinyMCE, latex, chemistry e
 Requires at least: 3.5
 Tested up to: 5.6
 Stable tag: 1.7
+Requires PHP: 8.0
 
 Adds equation editor to wordpress posts ,pages and custom post types TinyMCE editor.
 
