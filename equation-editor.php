@@ -82,13 +82,23 @@ if(!class_exists('mw_equation_editor')) {
         public function save(): void {
             $nonce = isset($_POST['mw_equation_editor_nonce']) ? sanitize_text_field(wp_unslash($_POST['mw_equation_editor_nonce'])) : '';
             if (isset($_POST['submit']) && wp_verify_nonce($nonce, 'mw_equation_editor_action')) {
-                $set = update_option($this->option, $_POST);
-                $this->redirect($set ? '?page=mw_equation_editor&s=y' : '?page=mw_equation_editor&s=n');
-            }
-        }
+                // Sanitize and validate settings.
+                $valid_editors = array( 'wiris', 'latex', 'both' );
+                $editor_type   = isset($_POST['select_eq_editor']) ? sanitize_text_field(wp_unslash($_POST['select_eq_editor'])) : 'wiris';
 
-        private function redirect(string $url): void {
-            echo '<script>window.location.href="' . esc_js($url) . '"</script>';
+                $settings = array(
+                    'enable_eq_editor' => isset($_POST['enable_eq_editor']) ? '1' : '0',
+                    'select_eq_editor' => in_array($editor_type, $valid_editors, true) ? $editor_type : 'wiris',
+                );
+
+                $set = update_option($this->option, $settings);
+                $url = $set ? 'admin.php?page=mw_equation_editor&s=y' : 'admin.php?page=mw_equation_editor&s=n';
+
+                if ( ! headers_sent() ) {
+                    wp_safe_redirect( admin_url( $url ) );
+                    exit;
+                }
+            }
         }
     }
 
