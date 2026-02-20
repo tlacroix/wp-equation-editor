@@ -5,6 +5,7 @@
     <!-- What to scan -->
     <file>./equation-editor.php</file>
     <file>./includes</file>
+    <file>./uninstall.php</file>
 
     <!-- Exclude third-party libraries -->
     <exclude-pattern>./tiny_mce_wiris/*</exclude-pattern>
@@ -18,29 +19,26 @@
     <arg name="extensions" value="php"/>
     <arg name="parallel" value="8"/>
 
-    <!-- Use WordPress-Core as base (less strict than full WordPress standard) -->
+    <!-- Use WordPress-Core standard with minimal exclusions -->
     <rule ref="WordPress-Core">
-        <!-- Allow short array syntax -->
+        <!-- Allow short array syntax (modern PHP) -->
         <exclude name="Universal.Arrays.DisallowShortArraySyntax"/>
-        <!-- Relax formatting rules for legacy code -->
-        <exclude name="WordPress.Files.FileName"/>
-        <exclude name="Squiz.Commenting"/>
+        <!-- Line endings handled by git -->
         <exclude name="Generic.Files.LineEndings"/>
-        <exclude name="Generic.ControlStructures.InlineControlStructure"/>
+        <!-- Allow embedded PHP in Settings class render methods -->
         <exclude name="Squiz.PHP.EmbeddedPhp"/>
-        <exclude name="PEAR.Functions.FunctionCallSignature"/>
+        <!-- Relaxed whitespace rules -->
         <exclude name="Generic.WhiteSpace"/>
         <exclude name="WordPress.WhiteSpace"/>
+        <exclude name="Universal.WhiteSpace.PrecisionAlignment"/>
+        <exclude name="Generic.Formatting.MultipleStatementAlignment"/>
+        <!-- Relaxed formatting rules -->
+        <exclude name="Generic.ControlStructures.InlineControlStructure"/>
+        <exclude name="PEAR.Functions.FunctionCallSignature"/>
         <exclude name="Squiz.ControlStructures"/>
         <exclude name="Squiz.Functions.FunctionDeclarationArgumentSpacing"/>
         <exclude name="NormalizedArrays.Arrays.ArrayBraceSpacing"/>
-        <exclude name="Universal.WhiteSpace.PrecisionAlignment"/>
-        <exclude name="Generic.Formatting.MultipleStatementAlignment"/>
         <exclude name="PSR2.Files.EndFileNewline"/>
-        <exclude name="PEAR.NamingConventions.ValidClassName"/>
-        <exclude name="WordPress.PHP.YodaConditions"/>
-        <exclude name="Universal.Operators.StrictComparisons"/>
-        <exclude name="WordPress.WP.CapitalPDangit"/>
     </rule>
 
     <!-- Text domain -->
