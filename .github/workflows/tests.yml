@@ -7,10 +7,53 @@ on:
     branches: [ main ]
 
 jobs:
+  phpcs:
+    name: PHP CodeSniffer
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          tools: cs2pr
+
+      - name: Install dependencies
+        run: composer install --no-progress --prefer-dist
+
+      - name: Run PHPCS
+        run: composer phpcs -- --report-full --report-checkstyle=./phpcs-report.xml
+
+      - name: Show PHPCS results in PR
+        if: ${{ always() }}
+        run: cs2pr ./phpcs-report.xml
+
+  phpstan:
+    name: PHPStan
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+
+      - name: Install dependencies
+        run: composer install --no-progress --prefer-dist
+
+      - name: Run PHPStan
+        run: composer phpstan
+
   test:
+    name: PHPUnit (PHP ${{ matrix.php-version }}, WP ${{ matrix.wordpress-version }})
     runs-on: ubuntu-latest
 
     strategy:
+      fail-fast: false
       matrix:
         php-version: ['8.0', '8.1', '8.2', '8.3', '8.4']
         wordpress-version: ['latest', '6.0']
@@ -40,8 +83,7 @@ jobs:
           coverage: none
 
       - name: Install dependencies
-        run: |
-          composer require --dev yoast/phpunit-polyfills:"^2.0"
+        run: composer install --no-progress --prefer-dist
 
       - name: Install WordPress test suite
         run: |
@@ -49,4 +91,4 @@ jobs:
           bash bin/install-wp-tests.sh wordpress_test root root 127.0.0.1 ${{ matrix.wordpress-version }}
 
       - name: Run tests
-        run: vendor/bin/phpunit
+        run: composer test

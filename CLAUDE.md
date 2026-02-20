@@ -55,6 +55,12 @@ bin/install-wp-tests.sh wordpress_test root '' localhost latest
 
 # Run tests
 composer test
+
+# Run linters
+composer phpcs      # PHP CodeSniffer (WordPress coding standards)
+composer phpstan    # Static analysis
+composer lint       # Run both linters
+composer phpcbf     # Auto-fix PHPCS violations
 ```
 
-Tests run automatically on push/PR via GitHub Actions (PHP 8.0-8.4, WP latest + 6.0).
+Tests and linters run automatically on push/PR via GitHub Actions (PHP 8.0-8.4, WP latest + 6.0).
