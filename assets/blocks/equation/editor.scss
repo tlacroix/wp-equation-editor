@@ -1,0 +1,42 @@
+.wp-block-equation-editor-equation {
+	padding: 1rem;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	background: #f9f9f9;
+
+	.components-textarea-control {
+		margin-bottom: 1rem;
+	}
+
+	.equation-editor-preview {
+		border-top: 1px solid #ddd;
+		padding-top: 1rem;
+
+		.equation-editor-preview-label {
+			display: block;
+			font-size: 11px;
+			text-transform: uppercase;
+			color: #757575;
+			margin-bottom: 0.5rem;
+		}
+
+		.equation-editor-error {
+			color: #cc0000;
+			font-size: 12px;
+			margin-bottom: 0.5rem;
+		}
+
+		.equation-editor-katex-output {
+			min-height: 2rem;
+			padding: 0.5rem;
+			background: #fff;
+			border-radius: 2px;
+		}
+	}
+
+	&.is-display-mode {
+		.equation-editor-katex-output {
+			text-align: center;
+		}
+	}
+}

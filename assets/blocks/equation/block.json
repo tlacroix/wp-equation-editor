@@ -1,0 +1,33 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "equation-editor/equation",
+	"version": "1.0.0",
+	"title": "Equation",
+	"category": "text",
+	"icon": "editor-code",
+	"description": "Display mathematical equations using LaTeX syntax.",
+	"keywords": [ "math", "latex", "equation", "formula", "katex" ],
+	"supports": {
+		"html": false,
+		"align": [ "wide", "full" ],
+		"spacing": {
+			"margin": true,
+			"padding": true
+		}
+	},
+	"attributes": {
+		"latex": {
+			"type": "string",
+			"default": ""
+		},
+		"displayMode": {
+			"type": "boolean",
+			"default": true
+		}
+	},
+	"textdomain": "wp-equation-editor",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css"
+}

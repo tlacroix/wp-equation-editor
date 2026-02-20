@@ -1,0 +1,16 @@
+includes:
+    - vendor/szepeviktor/phpstan-wordpress/extension.neon
+
+parameters:
+    level: 5
+    bootstrapFiles:
+        - tests/phpstan-bootstrap.php
+    paths:
+        - equation-editor.php
+        - includes
+    excludePaths:
+        - tiny_mce_wiris
+        - vendor
+        - tests
+        - node_modules
+        - build

@@ -1,95 +1,212 @@
 === Equation Editor ===
 Contributors: modalweb, nuagelab
-Tags: maths editor, physics editor, equation editor, TinyMCE, latex, chemistry editor, wiris editor
-Requires at least: 3.5
-Tested up to: 5.6
-Stable tag: 1.7
+Tags: equation, math, latex, katex, gutenberg
+Requires at least: 6.7
+Tested up to: 6.9
+Stable tag: 2.1.0
+Requires PHP: 8.0
+License: GPL-2.0-or-later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Adds equation editor to wordpress posts ,pages and custom post types TinyMCE editor.
+Add mathematical equations to WordPress using LaTeX. Supports Block Editor and Classic Editor.
 
 == Description ==
 
-Equation Editor is a set or bundle of popular editors which helps you to add maths, physics and chemistry formulas and equations in your webpages.
+This plugin is based on the now deleted equation-editor plugin.
 
-No need of seperate editors for maths, physics and chemistry. Equation editor plugin is enough. Just install and start your work.
+Equation Editor makes it easy to add beautiful mathematical, physics, and chemistry equations to your WordPress posts and pages.
 
-A Tiny MCE plugin which makes writing latex equation easy and WYSIWYG(what you see is what you get). It converts latex code into image which shows real beautiful latex equations on your post.
+= Block Editor (Gutenberg) =
 
-It adds an "fx" and chemistry button on the wordpress TinyMCE editor, on clicks it the codecogs latex equation editor pops up or wiris editor depends upon settings, where you can edit latex, then click the copy button to copy the equation icon back in TinyMCE textarea.
- 
+The **Equation block** provides a modern editing experience:
 
-= Key Features of Equation editor =
+* Write equations using standard LaTeX syntax
+* Live preview powered by KaTeX
+* Display mode (centered) or inline equations
+* Fast client-side rendering
 
+= Classic Editor (TinyMCE) =
 
+For Classic Editor users, the plugin adds toolbar buttons for:
 
-* **Wiris Editor:** Wiris editor allows you can add maths, physics and chemisty equations.
-* **Codecogs latex:** Maximum users know about Codecogs latex, this is editor with technology allows you to add equations on your webpages.
-* **Maths Equations Editor** Allows you to add maths equations.
-* **Physics Equations Editor:** Allows you to add physics equations.
-* **Chemistry Equations Editor:** Allows you to add chemistry equations.
-* **Formula Editor:** Most popular editor allows you to add multi type equations easily.(Pro)
-* **Post Type Filter:** You can filter your equation editor on any post types that you want.(Pro)
+* **CodeCogs LaTeX Editor** - Visual equation editor with LaTeX output
+* **Wiris Editor** - Full-featured math and chemistry editor
+* Use both editors together
+
+= LaTeX Examples =
+
+`E = mc^2`
+`\frac{-b \pm \sqrt{b^2 - 4ac}}{2a}`
+`\int_0^\infty e^{-x^2} dx`
+`\sum_{n=1}^{\infty} \frac{1}{n^2} = \frac{\pi^2}{6}`
+
+= Key Features =
+
+* **Gutenberg Block** - Native block editor support with live KaTeX preview
+* **TinyMCE Integration** - Classic Editor support with Wiris and CodeCogs
+* **LaTeX Syntax** - Industry-standard equation notation
+* **KaTeX Rendering** - Fast, high-quality equation display
+* **Display Modes** - Centered (display) or inline equations
+* **Responsive** - Equations scale properly on all devices
 
 == Installation ==
 
-1. Upload to the `/wp-content/plugins/` directory
-2. Activate the plugin through the 'Plugins' menu in WordPress
-3. find the "fx" button and Chemistry icon on your wordpress TinyMCE editor
-
+1. Upload the plugin to `/wp-content/plugins/equation-editor`
+2. Activate through the 'Plugins' menu in WordPress
+3. **Block Editor**: Add the "Equation" block to your post
+4. **Classic Editor**: Click the "fx" button in the toolbar
 
 == Frequently Asked Questions ==
 
- = How to create any equation ? =
+= How do I add an equation in the Block Editor? =
 
-Simple install equation editor plugin, then from settings select type of editor. Then go to page or post or custom post, you can see icons a like 'fx' in TinyMCE editor. Click on button and create you equation.
+1. Click the "+" button to add a new block
+2. Search for "Equation" or find it in the Text category
+3. Enter your LaTeX equation
+4. Toggle "Display Mode" for centered equations
 
- = Can we use wiris and latex both ? =
+= How do I add an equation in the Classic Editor? =
 
-Yes you can, just select all from Editor type in settings.
+1. Click the "fx" button in the TinyMCE toolbar
+2. Use the CodeCogs visual editor to create your equation
+3. Click "Copy" to insert the equation into your post
+
+= Can I use both Wiris and LaTeX editors? =
+
+Yes! Go to Settings → Equation Editor and select "Both" as the editor type.
+
+= What LaTeX syntax is supported? =
+
+The Gutenberg block uses KaTeX for rendering, which supports most common LaTeX math commands. See the [KaTeX documentation](https://katex.org/docs/supported.html) for the full list.
+
+= Is MathML supported? =
+
+The Wiris editor supports MathML input and output. The Gutenberg block currently uses LaTeX only.
 
 == Screenshots ==
-1. Settings
-2. Icons on Editor
-3. Maths Editor
-4. Chemistry Editor
-5. Latex Editor
-6. Maths Stats Equation Example
-7. Maths Matrices Equation Example
-8. Maths Sets Equation Example
-9. Maths Trigonometry Equation Example
-10. Maths Geometry Equation Example
-11. Chemistry Example
-12. Physics Example
-13. Maths Algebra Equation Example
-14. Maths Calcus Equation Example
-15. Mixed Example
+
+1. Equation block in the Block Editor with live preview
+2. Settings page with editor type selection
+3. TinyMCE toolbar with equation buttons
+4. Wiris math editor
+5. Wiris chemistry editor
+6. CodeCogs LaTeX editor
 
 == Changelog ==
 
-= 1.7 (31st Jan,2021) =
+= 2.1.0 (2025-02-19) =
 
-* Bug fixes and Compatible with WordPress 5.6
+* **New**: Gutenberg Equation block with live KaTeX preview
+* **New**: Display mode toggle (centered vs inline equations)
+* **New**: KaTeX rendering for fast, high-quality equations
+* **New**: Server-side rendering for dynamic content
+* **Improved**: PHP 8.0+ with modern code architecture
+* **Improved**: WordPress Settings API integration
+* **Improved**: Comprehensive test suite (100+ tests)
+* **Improved**: WordPress Coding Standards compliance
+* **Security**: Input sanitization and output escaping
 
-= 1.6 (16th April,2020) =
+= 2.0.0 (2025-02-19) =
 
-* Compatible with WordPress 5.2
+* **Breaking**: Requires PHP 8.0 or higher
+* **New**: PSR-4 autoloading with namespaces
+* **New**: Separated TinyMCE, Settings, and Plugin classes
+* **New**: Plugin constants for paths and URLs
+* **New**: Uninstall and deactivation hooks
+* **Improved**: Complete code refactoring
 
-= 1.5 (15th May,2019) =
+= 1.9.0 (2025-02-19) =
 
-* Compatible with WordPress 5.2
+* **New**: WordPress Settings API migration
+* **New**: Settings link in plugins list
+* **Improved**: Admin UI with WordPress standards
 
-= 1.4 (15th March,2018) =
+= 1.8.0 (2025-02-19) =
 
-* Unwanted Buy Pro Message Removed from all screens.
+* **Security**: Input sanitization on settings save
+* **Security**: Editor type validation
+* **Security**: Output escaping in admin template
 
-= 1.3 (8th March,2018) =
+= 1.7 (2021-01-31) =
 
-* Minor Fixes
+* Bug fixes and WordPress 5.6 compatibility
 
-= 1.2 (24th Feb,2018) =
+= 1.6 (2020-04-16) =
 
-* https issue resolved
+* WordPress 5.2 compatibility
 
-= 1.1 (31st Jan,2018) =
+= 1.5 (2019-05-15) =
 
-* fix some equations issues.
+* WordPress 5.2 compatibility
+
+= 1.4 (2018-03-15) =
+
+* Removed unwanted Pro message
+
+= 1.3 (2018-03-08) =
+
+* Minor fixes
+
+= 1.2 (2018-02-24) =
+
+* HTTPS issue resolved
+
+= 1.1 (2018-01-31) =
+
+* Fixed equation issues
+
+== Upgrade Notice ==
+
+= 2.1.0 =
+New Gutenberg block with live KaTeX preview! Requires PHP 8.0+.
+
+= 2.0.0 =
+Major refactoring with modern PHP. Requires PHP 8.0 or higher.
+
+== Developer Documentation ==
+
+= Hooks and Filters =
+
+The plugin provides several hooks for customization:
+
+`mce_buttons` - Filter TinyMCE buttons
+`mce_external_plugins` - Filter TinyMCE plugins
+`equation_editor_settings` - Filter plugin settings
+
+= Block Attributes =
+
+The Equation block supports these attributes:
+
+* `latex` (string) - The LaTeX equation source
+* `displayMode` (boolean) - Whether to center the equation (default: true)
+
+= File Structure =
+
+`
+equation-editor/
+├── equation-editor.php      # Plugin bootstrap
+├── includes/
+│   ├── class-plugin.php     # Main plugin class
+│   ├── class-settings.php   # Settings API handler
+│   ├── class-tinymce.php    # TinyMCE integration
+│   └── class-gutenberg.php  # Block Editor integration
+├── assets/
+│   ├── blocks/equation/     # Block source files
+│   └── js/eq_editor.js      # TinyMCE plugin
+├── build/blocks/equation/   # Compiled block assets
+└── tiny_mce_wiris/          # Wiris editor (third-party)
+`
+
+= Building from Source =
+
+`
+npm install
+npm run build
+`
+
+= Running Tests =
+
+`
+composer install
+composer test
+`

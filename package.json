@@ -1,0 +1,19 @@
+{
+	"name": "equation-editor",
+	"version": "2.1.0",
+	"description": "Equation Editor WordPress plugin with Gutenberg block support",
+	"private": true,
+	"scripts": {
+		"build": "wp-scripts build --webpack-src-dir=assets/blocks --output-path=build/blocks",
+		"start": "wp-scripts start --webpack-src-dir=assets/blocks --output-path=build/blocks",
+		"lint:js": "wp-scripts lint-js assets/blocks",
+		"lint:css": "wp-scripts lint-style assets/blocks/**/*.scss",
+		"format": "wp-scripts format assets/blocks"
+	},
+	"devDependencies": {
+		"@wordpress/scripts": "^27.0.0"
+	},
+	"engines": {
+		"node": ">=18.0.0"
+	}
+}

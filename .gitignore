@@ -2,12 +2,36 @@
 .DS_Store
 Thumbs.db
 
+# Editor swap/temp files
+*.swp
+*.swo
+*~
+
 # IDE/Editor
 .idea/
 .vscode/
 *.sublime-*
 
+# Composer
+/vendor/
+composer.lock
+
+# Node.js
+/node_modules/
+package-lock.json
+
+# PHPUnit
+.phpunit.result.cache
+phpunit.xml
+
+# PHPCS
+phpcs.xml
+phpcs-report.xml
+
 # Wiris formula cache (generated at runtime)
 tiny_mce_wiris/cache/*
 !tiny_mce_wiris/cache/.htaccess
 !tiny_mce_wiris/cache/info.txt
+
+# WordPress submission bundle
+/wordpress-submission/

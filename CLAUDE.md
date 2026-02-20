@@ -31,10 +31,36 @@ Equation Editor is a WordPress plugin that adds mathematical and scientific equa
 ### Admin Interface
 - `admin/mw_equation_editor.php` - Settings page template (enable toggle, editor type dropdown)
 
-## Development Notes
-
-This is a WordPress plugin - no build process or package manager. Test by activating in a WordPress installation.
+## Development
 
 Settings page accessible at: WordPress Admin → Equation Editor
 
 Editor type options: `wiris`, `latex`, `both`
+
+## PHP Compatibility
+
+**Required:** PHP 8.0+
+**Tested:** PHP 8.0, 8.1, 8.2, 8.3, 8.4
+
+The Wiris integration library (`tiny_mce_wiris/integration/lib/`) is auto-generated from Haxe and has been patched for PHP 8.0+ compatibility (replaced deprecated `each()` with `foreach`).
+
+## Testing
+
+```bash
+# Install dependencies
+composer install
+
+# Set up WordPress test environment (requires MySQL)
+bin/install-wp-tests.sh wordpress_test root '' localhost latest
+
+# Run tests
+composer test
+
+# Run linters
+composer phpcs      # PHP CodeSniffer (WordPress coding standards)
+composer phpstan    # Static analysis
+composer lint       # Run both linters
+composer phpcbf     # Auto-fix PHPCS violations
+```
+
+Tests and linters run automatically on push/PR via GitHub Actions (PHP 8.0-8.4, WP latest + 6.0).
